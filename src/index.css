@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-ground: #08090c;
+    --text-primary: #f4f6fa;
+    --text-secondary: #9aa3b2;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --bezel-inner: #0f1118;
+  }
+
+  .light {
+    --bg-ground: #f8f9fa;
+    --text-primary: #0d1117;
+    --text-secondary: #57606a;
+    --border-subtle: rgba(0, 0, 0, 0.09);
+    --bezel-inner: #ffffff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg-ground);
+    color: var(--text-primary);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom Themed Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #08090c;
+  }
+
+  .light ::-webkit-scrollbar-track {
+    background: #f1f2f5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #232936;
+    border-radius: 4px;
+    border: 2px solid transparent;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4e5b72;
+  }
+
+  /* Caret & Focus */
+  input, textarea, select {
+    caret-color: #b8f34a;
+  }
+
+  :focus-visible {
+    outline: 2px solid #b8f34a;
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Double-Bezel Architectural Container */
+  .bezel-container {
+    @apply rounded-2xl p-1 bg-white/[0.04] dark:bg-white/[0.03] border border-white/10 shadow-sm transition-all duration-300;
+  }
+
+  .light .bezel-container {
+    @apply bg-black/[0.03] border-black/10;
+  }
+
+  .bezel-inner {
+    @apply rounded-[calc(1rem-2px)] bg-ink-900/90 dark:bg-ink-900/90 p-5 md:p-6 transition-all duration-300;
+  }
+
+  .light .bezel-inner {
+    @apply bg-white;
+  }
+
+  /* Button-in-Button Nested Architecture */
+  .btn-primary-island {
+    @apply inline-flex items-center gap-3 rounded-full bg-accent-lime text-ink-950 font-semibold px-5 py-2.5 
+           transition-all duration-300 hover:bg-accent-lime-hover active:scale-[0.98] shadow-sm hover:shadow-spot;
+  }
+
+  .btn-ghost-island {
+    @apply inline-flex items-center gap-3 rounded-full border border-white/15 dark:border-white/15 
+           text-ink-100 hover:text-white hover:border-accent-lime/60 px-5 py-2.5 font-medium
+           transition-all duration-300 active:scale-[0.98];
+  }
+
+  .light .btn-ghost-island {
+    @apply border-black/15 text-ink-900 hover:text-black hover:border-black/40;
+  }
+
+  /* Section Spacing Standard */
+  .section-rhythm {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+}
+
+/* Subtle Grid Dot Pattern Background */
+.bg-grid-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.light .bg-grid-dots {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+}
+
+/* Code Snippet Styles */
+pre code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
