@@ -6,9 +6,11 @@ import {
   Target, 
   Code2, 
   CheckCircle2, 
-  ArrowRight 
+  ArrowRight,
+  Award,
+  Globe
 } from 'lucide-react';
-import { PERSONAL_INFO } from '../../data/portfolioData';
+import { PERSONAL_INFO, CERTIFICATIONS_DATA, AWARDS_DATA } from '../../data/portfolioData';
 
 export const AboutSection: React.FC = () => {
   return (
@@ -19,14 +21,14 @@ export const AboutSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-12 border-b border-white/10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-lime mb-2">
-              Professional Overview
+              Candidate Profile
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
-              About Me
+              About Shaik Umar Basha
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-ink-400 max-w-md">
-            Pragmatic software engineer with a focus on high-throughput backend services, clean architecture, and continuous learning.
+            Information Technology graduate (May 2026) with hands-on internship experience in backend development, REST APIs, and database engineering.
           </p>
         </div>
 
@@ -39,38 +41,38 @@ export const AboutSection: React.FC = () => {
               <div className="bezel-inner space-y-4">
                 <div className="flex items-center gap-2 text-xs font-semibold text-accent-lime uppercase tracking-wider">
                   <Code2 className="w-4 h-4" />
-                  <span>The Engineering Mindset</span>
+                  <span>Fresher &bull; Technical Foundation</span>
                 </div>
 
                 <p className="text-sm sm:text-base text-ink-200 leading-relaxed">
-                  I am a passionate software developer currently working as a <strong className="text-white">Backend Engineer at DropXcorp</strong> in Hyderabad. My work revolves around building dependable services, designing scalable REST APIs, and modeling performant database architectures in Python and Django.
+                  I am a motivated <strong className="text-white">Information Technology student (graduating May 2026)</strong> at Malla Reddy College of Engineering, currently contributing as a <strong className="text-white">Backend Developer Intern at DropXCorp Pvt Ltd</strong> in Hyderabad.
                 </p>
 
                 <p className="text-sm sm:text-base text-ink-300 leading-relaxed">
-                  Parallel to my professional engagement, I am completing my <strong className="text-white">Bachelor of Technology in Information Technology</strong> at Malla Reddy College of Engineering (graduating May 2026, CGPA 7.9/10). This dual foundation of academic computer science rigor and hands-on industry engineering gives me both algorithmic depth and production discipline.
+                  My practical experience includes engineering REST APIs for <em>DropXcutz</em> (a multi-tenant salon ERP) using TypeScript, PostgreSQL, and Prisma ORM, and building school management workflows in <em>EduCore</em>. In academic and collaborative team settings, I have architected Django applications with user authentication, role-based access for multiple user personas, and integrated machine learning prediction pipelines achieving verified <strong className="text-accent-lime">89% and 84% accuracy rates</strong>.
                 </p>
 
                 <p className="text-sm sm:text-base text-ink-300 leading-relaxed">
-                  I believe software should be written with clarity, defensiveness, and purpose. Rather than pursuing surface vanity, I prioritize clean API contracts, efficient data indexing, and maintainable systems that solve real business problems without operational friction.
+                  As an entry-level software engineer, I bring a solid foundation in Python, Java, C, Object-Oriented Programming (OOP), SQL, and the Software Development Life Cycle (SDLC). I am eager to apply my analytical mindset, testing habits, and hunger for continuous learning within a high-impact engineering team.
                 </p>
 
-                {/* Core tenets list */}
+                {/* Core Competency Highlights */}
                 <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-white/10">
                   <div className="flex items-start gap-2.5 text-xs text-ink-300">
                     <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
-                    <span>REST API serialization &amp; idempotency</span>
+                    <span>Django &amp; TypeScript REST API development</span>
                   </div>
                   <div className="flex items-start gap-2.5 text-xs text-ink-300">
                     <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
-                    <span>Database schema normalization &amp; ORM safety</span>
+                    <span>PostgreSQL, SQLite &amp; Prisma ORM schema design</span>
                   </div>
                   <div className="flex items-start gap-2.5 text-xs text-ink-300">
                     <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
-                    <span>Systematic debugging &amp; clean refactoring</span>
+                    <span>Pandas &amp; NumPy data workflows (10,000+ records)</span>
                   </div>
                   <div className="flex items-start gap-2.5 text-xs text-ink-300">
                     <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
-                    <span>Pragmatic learning &amp; engineering adaptability</span>
+                    <span>JWT auth, session management &amp; Razorpay payments</span>
                   </div>
                 </div>
               </div>
@@ -83,33 +85,60 @@ export const AboutSection: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-xs font-semibold text-white uppercase tracking-wider mb-1">
-                  Target Roles &amp; Objectives
+                  Target Roles
                 </h4>
                 <p className="text-xs sm:text-sm text-ink-300 leading-relaxed">
                   {PERSONAL_INFO.careerObjective}
                 </p>
               </div>
             </div>
+
+            {/* Honors & Certifications Card */}
+            <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
+              <div className="flex items-center gap-2 text-xs font-semibold text-accent-lime uppercase tracking-wider">
+                <Award className="w-4 h-4" />
+                <span>Honors &amp; Verified Certifications</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                {AWARDS_DATA.map((award, aIdx) => (
+                  <div key={aIdx} className="p-3 rounded-xl bg-ink-900 border border-white/10 space-y-1">
+                    <span className="text-[10px] font-semibold text-accent-lime uppercase">Hackathon Award</span>
+                    <h5 className="font-bold text-white text-xs">{award.title}</h5>
+                    <p className="text-[11px] text-ink-400">{award.event}</p>
+                  </div>
+                ))}
+
+                {CERTIFICATIONS_DATA.map((cert, cIdx) => (
+                  <div key={cIdx} className="p-3 rounded-xl bg-ink-900 border border-white/10 space-y-1">
+                    <span className="text-[10px] font-semibold text-cyan-400 uppercase">{cert.badge}</span>
+                    <h5 className="font-bold text-white text-xs">{cert.title}</h5>
+                    <p className="text-[11px] text-ink-400">{cert.issuer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
 
           {/* Right Column: Key Dossier Data Points (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             
-            {/* Fact Card 1: DropXcorp */}
+            {/* Fact Card 1: DropXCorp Internship */}
             <div className="p-5 rounded-2xl bg-ink-900/60 border border-white/10 hover:border-white/20 transition-all">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
                   <Building2 className="w-4 h-4" />
-                  <span>Current Engagement</span>
+                  <span>Current Internship</span>
                 </div>
                 <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Active
+                  Sep 2026 – Present
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white">Backend Engineer</h3>
-              <p className="text-xs text-ink-300 mt-1">DropXcorp &bull; Hyderabad, India</p>
+              <h3 className="text-base font-bold text-white">Backend Developer Intern</h3>
+              <p className="text-xs text-ink-300 mt-1">DropXCorp Pvt Ltd &bull; Hyderabad, India</p>
               <p className="text-xs text-ink-400 mt-2">
-                Developing backend services, API integrations, and database architectures.
+                Developing multi-tenant SaaS features for DropXcutz (TypeScript REST API, PostgreSQL, Prisma) and EduCore ERP.
               </p>
             </div>
 
@@ -118,29 +147,40 @@ export const AboutSection: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
                   <GraduationCap className="w-4 h-4" />
-                  <span>Formal Education</span>
+                  <span>Academic Standing</span>
                 </div>
                 <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                  May 2026
+                  Batch 2026
                 </span>
               </div>
               <h3 className="text-base font-bold text-white">B.Tech in Information Technology</h3>
               <p className="text-xs text-ink-300 mt-1">Malla Reddy College of Engineering</p>
               <p className="text-xs text-ink-400 mt-2">
-                Current Cumulative Grade: <strong className="text-ink-200">CGPA 7.9 / 10</strong>
+                Graduating: <strong className="text-ink-200">May 2026</strong> &bull; Current Cumulative Score: <strong className="text-accent-lime">CGPA 7.9 / 10</strong>
               </p>
             </div>
 
-            {/* Fact Card 3: Location & Readiness */}
-            <div className="p-5 rounded-2xl bg-ink-900/60 border border-white/10 hover:border-white/20 transition-all">
-              <div className="flex items-center gap-2 text-accent-lime text-xs font-bold uppercase tracking-wider mb-2">
+            {/* Fact Card 3: Location & Languages */}
+            <div className="p-5 rounded-2xl bg-ink-900/60 border border-white/10 hover:border-white/20 transition-all space-y-3">
+              <div className="flex items-center gap-2 text-accent-lime text-xs font-bold uppercase tracking-wider">
                 <MapPin className="w-4 h-4" />
-                <span>Base Location</span>
+                <span>Location &amp; Languages</span>
               </div>
-              <h3 className="text-base font-bold text-white">Hyderabad, Telangana, India</h3>
-              <p className="text-xs text-ink-300 mt-1">
-                Open to on-site, hybrid, and remote engineering opportunities.
-              </p>
+              <div>
+                <h3 className="text-base font-bold text-white">Hyderabad, Telangana, India</h3>
+                <p className="text-xs text-ink-300 mt-0.5">
+                  Available for full-time entry-level on-site, hybrid, and remote roles.
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-white/10 flex items-center gap-3 text-xs text-ink-300">
+                <Globe className="w-3.5 h-3.5 text-ink-400 shrink-0" />
+                <div className="flex flex-wrap gap-2 text-[11px]">
+                  <span className="px-2 py-0.5 rounded bg-white/5 border border-white/5">Telugu (Native)</span>
+                  <span className="px-2 py-0.5 rounded bg-white/5 border border-white/5">Hindi (Fluent)</span>
+                  <span className="px-2 py-0.5 rounded bg-white/5 border border-white/5">English (Conversational)</span>
+                </div>
+              </div>
             </div>
 
             {/* Quick Action */}
@@ -148,7 +188,7 @@ export const AboutSection: React.FC = () => {
               href="#experience"
               className="inline-flex items-center justify-between w-full p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white transition-all group"
             >
-              <span>Explore DropXcorp Experience Details</span>
+              <span>Review Internship &amp; Project Experience</span>
               <ArrowRight className="w-4 h-4 text-accent-lime transition-transform group-hover:translate-x-1" />
             </a>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Terminal } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { motion, useScroll, useSpring } from 'motion/react';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 interface NavbarProps {
@@ -10,6 +11,12 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scrollProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +37,11 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 md:pt-6 transition-all duration-300">
+      <motion.div
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 z-[60] h-1 origin-left bg-accent-lime"
+        style={{ scaleX: scrollProgress }}
+      />
       <div className={`max-w-6xl mx-auto rounded-full transition-all duration-300 px-4 md:px-6 py-3 border ${
         isScrolled 
           ? 'bg-ink-900/80 backdrop-blur-xl border-white/10 shadow-lg' 
@@ -41,15 +53,19 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
           href="#hero" 
           className="flex items-center gap-2.5 text-sm font-bold tracking-tight text-ink-50 hover:text-accent-lime transition-colors group"
         >
-          <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent-lime group-hover:border-accent-lime/40 transition-colors">
-            <Terminal className="w-4 h-4" />
+          <div className="relative w-8 h-8 shrink-0 overflow-hidden rounded-lg bg-white/5 border border-accent-lime/60 shadow-[0_0_14px_rgba(184,243,74,0.2)] transition-shadow group-hover:shadow-[0_0_18px_rgba(184,243,74,0.35)]">
+            <img
+              src="/umar-basha-portrait.png"
+              alt="Shaik Umar Basha"
+              className="absolute left-1/2 top-[-5px] h-24 w-16 max-w-none -translate-x-1/2 object-cover"
+            />
           </div>
           <span className="font-display text-base font-bold">
             Umar Basha<span className="text-accent-lime">.</span>
           </span>
           <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            DropXcorp
+            DropXCorp Intern ('26)
           </span>
         </a>
 

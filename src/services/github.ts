@@ -9,6 +9,19 @@ interface CachedData {
   repos: GitHubRepo[];
 }
 
+function isFeaturedRepository(repoName: string): boolean {
+  return FEATURED_PROJECTS_CONFIG.some(
+    (project) => project.featured && project.repoName.toLowerCase() === repoName.toLowerCase()
+  );
+}
+
+function normalizeFeaturedRepositories(repos: GitHubRepo[]): GitHubRepo[] {
+  return repos.map((repo) => ({
+    ...repo,
+    is_featured: isFeaturedRepository(repo.name),
+  }));
+}
+
 export async function fetchGitHubRepos(): Promise<{ repos: GitHubRepo[]; fromCache: boolean; error: string | null }> {
   // Check local cache first
   try {
@@ -16,7 +29,7 @@ export async function fetchGitHubRepos(): Promise<{ repos: GitHubRepo[]; fromCac
     if (cached) {
       const parsed: CachedData = JSON.parse(cached);
       if (Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.repos.length > 0) {
-        return { repos: parsed.repos, fromCache: true, error: null };
+        return { repos: normalizeFeaturedRepositories(parsed.repos), fromCache: true, error: null };
       }
     }
   } catch (e) {
@@ -52,9 +65,7 @@ export async function fetchGitHubRepos(): Promise<{ repos: GitHubRepo[]; fromCac
     const formattedRepos: GitHubRepo[] = rawRepos
       .filter((r) => !r.fork || r.stargazers_count > 0)
       .map((r) => {
-        const isFeatured = FEATURED_PROJECTS_CONFIG.some(
-          (f) => f.repoName.toLowerCase() === r.name.toLowerCase()
-        );
+        const isFeatured = isFeaturedRepository(r.name);
         return {
           id: r.id,
           name: r.name,
@@ -93,7 +104,7 @@ export async function fetchGitHubRepos(): Promise<{ repos: GitHubRepo[]; fromCac
         const parsed: CachedData = JSON.parse(cached);
         if (parsed.repos && parsed.repos.length > 0) {
           return {
-            repos: parsed.repos,
+            repos: normalizeFeaturedRepositories(parsed.repos),
             fromCache: true,
             error: 'GitHub API rate limit or network issue; displaying cached repositories.',
           };

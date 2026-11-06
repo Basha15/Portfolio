@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   Mail, 
   Send, 
@@ -6,8 +6,11 @@ import {
   AlertCircle, 
   Linkedin, 
   Github, 
+  Phone,
   Loader2,
-  Clock
+  Clock,
+  ChevronDown,
+  Check
 } from 'lucide-react';
 import { ContactFormData } from '../../types/portfolio';
 import { validateContactForm, submitContactInquiry, SendMessageResponse } from '../../services/contact';
@@ -18,7 +21,7 @@ export const ContactSection: React.FC = () => {
     recruiterName: '',
     companyName: '',
     workEmail: '',
-    opportunityType: 'Full-Time Software Engineer',
+    opportunityType: 'Full-Time Entry-Level Software Engineer',
     subject: '',
     message: '',
     honeypot: '',
@@ -27,15 +30,60 @@ export const ContactSection: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionResponse, setSubmissionResponse] = useState<SendMessageResponse | null>(null);
+  const [isOpportunityOpen, setIsOpportunityOpen] = useState(false);
+  const [activeOpportunityIndex, setActiveOpportunityIndex] = useState(0);
+  const opportunitySelectRef = useRef<HTMLDivElement>(null);
 
   const opportunityOptions = [
-    'Full-Time Backend Engineer',
-    'Software Developer Role',
+    'Full-Time Entry-Level Software Engineer',
+    'Backend Developer (Junior / Associate)',
     'Python / Django Developer',
-    'Associate Software Engineer',
-    'Contract / Freelance Project',
-    'Other Engineering Query'
+    'Full-Stack Developer (React / Next.js / TypeScript)',
+    'Graduate Software Engineer (2026 Batch)',
+    'Other Technical Opportunity'
   ];
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!opportunitySelectRef.current?.contains(event.target as Node)) {
+        setIsOpportunityOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    return () => document.removeEventListener('mousedown', closeOnOutsideClick);
+  }, []);
+
+  const selectOpportunity = (value: string) => {
+    setFormData((prev) => ({ ...prev, opportunityType: value }));
+    setIsOpportunityOpen(false);
+  };
+
+  const handleOpportunityKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    const selectedIndex = opportunityOptions.indexOf(formData.opportunityType);
+    const currentIndex = isOpportunityOpen ? activeOpportunityIndex : selectedIndex;
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      setActiveOpportunityIndex((currentIndex + direction + opportunityOptions.length) % opportunityOptions.length);
+      setIsOpportunityOpen(true);
+    } else if (event.key === 'Home' || event.key === 'End') {
+      event.preventDefault();
+      setActiveOpportunityIndex(event.key === 'Home' ? 0 : opportunityOptions.length - 1);
+      setIsOpportunityOpen(true);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (isOpportunityOpen) {
+        selectOpportunity(opportunityOptions[currentIndex]);
+      } else {
+        setActiveOpportunityIndex(selectedIndex);
+        setIsOpportunityOpen(true);
+      }
+    } else if (event.key === 'Escape' || event.key === 'Tab') {
+      setIsOpportunityOpen(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -69,7 +117,7 @@ export const ContactSection: React.FC = () => {
           recruiterName: '',
           companyName: '',
           workEmail: '',
-          opportunityType: 'Full-Time Software Engineer',
+          opportunityType: 'Full-Time Entry-Level Software Engineer',
           subject: '',
           message: '',
           honeypot: '',
@@ -103,7 +151,7 @@ export const ContactSection: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-ink-400 max-w-md">
-            Hiring managers and recruiters: connect directly for software engineering positions, technical interviews, or confidential discussions.
+            Hiring managers, talent acquisition, and engineering leads: connect directly with Shaik Umar Basha for entry-level engineering roles.
           </p>
         </div>
 
@@ -119,9 +167,9 @@ export const ContactSection: React.FC = () => {
                 <Clock className="w-4 h-4" />
                 <span>Response SLA</span>
               </div>
-              <h3 className="text-base font-bold text-white">Guaranteed Prompt Turnaround</h3>
+              <h3 className="text-base font-bold text-white">Fast Response Guaranteed</h3>
               <p className="text-xs text-ink-300 leading-relaxed">
-                All recruiter and engineering opportunities sent through this channel receive a verified response within 24 to 48 hours.
+                As a graduating senior and active intern, I monitor this inbox daily and guarantee a response within 24 hours.
               </p>
             </div>
 
@@ -141,6 +189,20 @@ export const ContactSection: React.FC = () => {
                 </div>
               </a>
 
+              {/* Phone */}
+              <a
+                href={`tel:${PERSONAL_INFO.phone}`}
+                className="flex items-center gap-3.5 p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all text-xs group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-white font-semibold">Mobile Phone</div>
+                  <div className="text-ink-400 font-mono text-[11px]">{PERSONAL_INFO.phone}</div>
+                </div>
+              </a>
+
               {/* LinkedIn */}
               <a
                 href={PERSONAL_INFO.linkedinUrl}
@@ -153,7 +215,7 @@ export const ContactSection: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-white font-semibold">LinkedIn Profile</div>
-                  <div className="text-ink-400 text-[11px]">in/shaik-umar-basha</div>
+                  <div className="text-ink-400 text-[11px]">in/shaik-umar-basha-28b07b320</div>
                 </div>
               </a>
 
@@ -190,10 +252,10 @@ export const ContactSection: React.FC = () => {
                 {/* Form Header */}
                 <div className="pb-6 mb-6 border-b border-white/10">
                   <h3 className="font-display text-xl font-bold text-white">
-                    Submit Candidate Inquiry
+                    Submit Candidate Inquiry / Role Details
                   </h3>
                   <p className="text-xs text-ink-400 mt-1">
-                    Provide the relevant role context and Umar Basha will review your message directly.
+                    Send opportunity specifications directly to Umar Basha.
                   </p>
                 </div>
 
@@ -267,19 +329,17 @@ export const ContactSection: React.FC = () => {
                       <label htmlFor="recruiterName" className="block text-xs font-semibold text-ink-200 mb-1.5">
                         Recruiter / Contact Name <span className="text-accent-lime">*</span>
                       </label>
-                      <div className="relative">
-                        <input
-                          id="recruiterName"
-                          type="text"
-                          name="recruiterName"
-                          value={formData.recruiterName}
-                          onChange={handleChange}
-                          placeholder="e.g. Sarah Jenkins"
-                          className={`w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border text-xs text-white placeholder-ink-500 focus:outline-none transition-colors ${
-                            errors.recruiterName ? 'border-red-500 ring-1 ring-red-500' : 'border-white/10 focus:border-accent-lime'
-                          }`}
-                        />
-                      </div>
+                      <input
+                        id="recruiterName"
+                        type="text"
+                        name="recruiterName"
+                        value={formData.recruiterName}
+                        onChange={handleChange}
+                        placeholder="e.g. Sarah Jenkins"
+                        className={`w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border text-xs text-white placeholder-ink-500 focus:outline-none transition-colors ${
+                          errors.recruiterName ? 'border-red-500 ring-1 ring-red-500' : 'border-white/10 focus:border-accent-lime'
+                        }`}
+                      />
                       {errors.recruiterName && (
                         <p className="text-[11px] text-red-400 mt-1">{errors.recruiterName}</p>
                       )}
@@ -295,7 +355,7 @@ export const ContactSection: React.FC = () => {
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleChange}
-                        placeholder="e.g. DropXcorp, Google, Stripe"
+                        placeholder="e.g. DropXCorp, Google, TCS"
                         className={`w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border text-xs text-white placeholder-ink-500 focus:outline-none transition-colors ${
                           errors.companyName ? 'border-red-500 ring-1 ring-red-500' : 'border-white/10 focus:border-accent-lime'
                         }`}
@@ -328,23 +388,64 @@ export const ContactSection: React.FC = () => {
                       )}
                     </div>
 
-                    <div>
+                    <div ref={opportunitySelectRef} className="relative">
                       <label htmlFor="opportunityType" className="block text-xs font-semibold text-ink-200 mb-1.5">
                         Job Position / Opportunity
                       </label>
-                      <select
+                      <button
                         id="opportunityType"
-                        name="opportunityType"
-                        value={formData.opportunityType}
-                        onChange={handleChange}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border border-white/10 text-xs text-white focus:outline-none focus:border-accent-lime transition-colors"
+                        type="button"
+                        aria-haspopup="listbox"
+                        aria-expanded={isOpportunityOpen}
+                        aria-controls="opportunityType-listbox"
+                        aria-activedescendant={isOpportunityOpen ? `opportunityType-option-${activeOpportunityIndex}` : undefined}
+                        onClick={() => {
+                          if (!isOpportunityOpen) {
+                            setActiveOpportunityIndex(opportunityOptions.indexOf(formData.opportunityType));
+                          }
+                          setIsOpportunityOpen((open) => !open);
+                        }}
+                        onKeyDown={handleOpportunityKeyDown}
+                        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-ink-950/80 border border-white/10 text-xs text-white text-left focus:outline-none focus:border-accent-lime transition-colors"
                       >
-                        {opportunityOptions.map((opt) => (
-                          <option key={opt} value={opt} className="bg-ink-950 text-white">
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
+                        <span>{formData.opportunityType}</span>
+                        <ChevronDown className={`w-4 h-4 text-accent-lime transition-transform ${isOpportunityOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <ul
+                        id="opportunityType-listbox"
+                        role="listbox"
+                        aria-label="Job Position / Opportunity"
+                        hidden={!isOpportunityOpen}
+                        className="absolute z-30 mt-1.5 w-full max-h-60 overflow-y-auto rounded-xl border border-accent-lime/40 bg-ink-900 p-1.5 shadow-2xl shadow-black/40"
+                      >
+                        {opportunityOptions.map((option, index) => {
+                          const isSelected = formData.opportunityType === option;
+                          const isActive = activeOpportunityIndex === index;
+
+                          return (
+                            <li key={option} role="presentation">
+                              <button
+                                id={`opportunityType-option-${index}`}
+                                type="button"
+                                role="option"
+                                aria-selected={isSelected}
+                                tabIndex={-1}
+                                onMouseDown={(event) => event.preventDefault()}
+                                onMouseEnter={() => setActiveOpportunityIndex(index)}
+                                onClick={() => selectOpportunity(option)}
+                                className={`w-full flex items-center justify-between rounded-lg px-3 py-2.5 text-left text-xs transition-colors ${
+                                  isActive || isSelected
+                                    ? 'bg-accent-lime text-ink-950 font-semibold'
+                                    : 'text-ink-200 hover:bg-accent-lime hover:text-ink-950'
+                                }`}
+                              >
+                                {option}
+                                {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </div>
                   </div>
 
@@ -359,7 +460,7 @@ export const ContactSection: React.FC = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      placeholder="e.g. Backend Software Engineer Role - Technical Interview Invitation"
+                      placeholder="e.g. Entry-Level Backend Developer Role - Interview Invitation"
                       className={`w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border text-xs text-white placeholder-ink-500 focus:outline-none transition-colors ${
                         errors.subject ? 'border-red-500 ring-1 ring-red-500' : 'border-white/10 focus:border-accent-lime'
                       }`}
@@ -380,7 +481,7 @@ export const ContactSection: React.FC = () => {
                       rows={5}
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Tell Umar about the team, required tech stack, compensation range, and interview timeline..."
+                      placeholder="Share details regarding the role, required tech stack, work location, and next steps..."
                       className={`w-full px-3.5 py-2.5 rounded-xl bg-ink-950/80 border text-xs text-white placeholder-ink-500 focus:outline-none transition-colors resize-y ${
                         errors.message ? 'border-red-500 ring-1 ring-red-500' : 'border-white/10 focus:border-accent-lime'
                       }`}
@@ -400,7 +501,7 @@ export const ContactSection: React.FC = () => {
                       {isSubmitting ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Dispatching Inquiry...</span>
+                          <span>Dispatching Message...</span>
                         </>
                       ) : (
                         <>

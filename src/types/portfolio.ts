@@ -2,7 +2,7 @@ export type ProficiencyLevel = 'Proficient' | 'Working Knowledge' | 'Foundationa
 
 export interface SkillItem {
   name: string;
-  category: 'Programming' | 'Backend & Databases' | 'Frontend' | 'Data & Libraries' | 'Core Concepts';
+  category: 'Programming' | 'Backend & Web' | 'Databases & ORM' | 'Data & ML' | 'Tools & Practices';
   level: ProficiencyLevel;
   iconName?: string;
   description?: string;
@@ -28,6 +28,20 @@ export interface EducationItem {
   graduationDate: string;
   score: string;
   highlights?: string[];
+}
+
+export interface CertificationItem {
+  title: string;
+  issuer: string;
+  year?: string;
+  badge?: string;
+}
+
+export interface AwardItem {
+  title: string;
+  event: string;
+  year: string;
+  description: string;
 }
 
 export interface GitHubRepo {
@@ -57,6 +71,8 @@ export interface FeaturedProjectConfig {
   liveUrl?: string;
   featured: boolean;
   category: 'Backend & ML' | 'Data & Analytics' | 'Web & Tools';
+  accuracy?: string;
+  teamSize?: string;
 }
 
 export interface ContactFormData {
@@ -66,5 +82,5 @@ export interface ContactFormData {
   opportunityType: string;
   subject: string;
   message: string;
-  honeypot?: string; // spam protection
+  honeypot?: string;
 }

@@ -9,21 +9,37 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 310 >>
+<< /Length 480 >>
 stream
 BT
 /F1 18 Tf
-50 720 Td
-(SHAIK UMAR BASHA - BACKEND ENGINEER) Tj
-/F1 11 Tf
-0 -24 Td
-(Hyderabad, India | shaikumarbasha19@gmail.com | github.com/Basha15) Tj
-0 -30 Td
-(EXPERIENCE: Backend Engineer at DropXcorp) Tj
-0 -20 Td
-(EDUCATION: B.Tech Information Technology, Malla Reddy College - CGPA 7.9) Tj
-0 -20 Td
-(STACK: Python, Django, DRF, MySQL, SQLite, REST APIs, Git) Tj
+50 730 Td
+(SHAIK UMAR BASHA - FRESHER / BACKEND DEVELOPER INTERN) Tj
+/F1 10 Tf
+0 -22 Td
+(Hyderabad, Telangana, India | +91 9640517558 | shaikumarbasha19@gmail.com | github.com/Basha15) Tj
+0 -28 Td
+(SUMMARY: B.Tech IT Graduate [May 2026] & Backend Developer Intern @ DropXCorp.) Tj
+0 -18 Td
+(EXPERIENCE 1: DropXCorp Pvt Ltd - Backend Developer Intern [Sep 2026 - Present]) Tj
+0 -14 Td
+(   - DropXcutz multi-tenant salon ERP with TypeScript REST API, PostgreSQL, Prisma, JWT, Razorpay.) Tj
+0 -14 Td
+(   - EduCore school ERP platform workflows [attendance, fees, results, offline sync].) Tj
+0 -18 Td
+(EXPERIENCE 2: Amdox Technologies - Data Analyst Intern [Oct 2025 - Dec 2025]) Tj
+0 -14 Td
+(   - Processed 10,000+ records using Python, Pandas, NumPy, SQL and automated reporting scripts.) Tj
+0 -18 Td
+(PROJECTS: Customer Churn Platform [89% Acc, Django, REST API, Team of 4]) Tj
+0 -14 Td
+(          Digital Currency Analysis Platform [84% Acc, Random Forest, SQL, Team of 4]) Tj
+0 -18 Td
+(EDUCATION: Malla Reddy College of Engineering - B.Tech IT [2022-2026] | CGPA: 7.9/10) Tj
+0 -14 Td
+(           Sri Chaitanya Junior College - Intermediate MPC [2020-2022] | 882/1000) Tj
+0 -18 Td
+(AWARDS: Winner, Internal Smart India Hackathon [SIH 2025] | Google Cloud Vertex AI Certified) Tj
 ET
 endstream
 endobj
@@ -37,9 +53,9 @@ xref
 0000000059 00000 n 
 0000000116 00000 n 
 0000000239 00000 n 
-0000000602 00000 n 
+0000000772 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-673
+843
 %%EOF

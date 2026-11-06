@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { 
   Github, 
-  ArrowUpRight, 
   RefreshCw, 
   AlertCircle, 
-  Filter, 
+  Filter,
   FolderGit2, 
   ExternalLink 
 } from 'lucide-react';
@@ -12,13 +12,14 @@ import { GitHubRepo } from '../../types/portfolio';
 import { fetchGitHubRepos } from '../../services/github';
 import { ProjectCard } from './ProjectCard';
 import { ProjectModal } from './ProjectModal';
-import { PERSONAL_INFO } from '../../data/portfolioData';
+import { FEATURED_PROJECTS_CONFIG, PERSONAL_INFO } from '../../data/portfolioData';
 
 export const ProjectsSection: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'featured' | 'python' | 'web'>('all');
+  const [activeFilter, setActiveFilter] = useState<'featured' | 'all' | 'python' | 'web'>('featured');
   const [selectedRepo, setSelectedRepo] = useState<GitHubRepo | null>(null);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
@@ -35,12 +36,18 @@ export const ProjectsSection: React.FC = () => {
     loadRepositories();
   }, []);
 
-  const filteredRepos = repos.filter((r) => {
-    if (activeFilter === 'featured') return r.is_featured;
-    if (activeFilter === 'python') return r.language?.toLowerCase() === 'python' || r.topics.includes('python');
-    if (activeFilter === 'web') return ['javascript', 'typescript', 'html', 'scss', 'css'].includes(r.language?.toLowerCase() || '');
-    return true;
-  });
+  const featuredRepos = FEATURED_PROJECTS_CONFIG
+    .filter((project) => project.featured)
+    .flatMap((project) => repos.filter(
+      (repo) => repo.is_featured && repo.name.toLowerCase() === project.repoName.toLowerCase()
+    ));
+  const visibleRepos = activeFilter === 'featured'
+    ? featuredRepos
+    : activeFilter === 'python'
+      ? repos.filter((repo) => repo.language?.toLowerCase() === 'python' || repo.topics.includes('python'))
+      : activeFilter === 'web'
+        ? repos.filter((repo) => ['javascript', 'typescript', 'html', 'scss', 'css'].includes(repo.language?.toLowerCase() || ''))
+        : repos;
 
   return (
     <section id="projects" className="section-rhythm px-4 sm:px-6 border-t border-white/5 relative">
@@ -98,61 +105,32 @@ export const ProjectsSection: React.FC = () => {
           </div>
         )}
 
-        {/* Filter Navigation */}
         <div className="mt-8 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Filter className="w-3.5 h-3.5 text-ink-400 mr-1" />
-            <button
-              onClick={() => setActiveFilter('all')}
-              type="button"
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                activeFilter === 'all'
-                  ? 'bg-accent-lime text-ink-950 font-semibold'
-                  : 'bg-white/5 text-ink-300 hover:text-white hover:bg-white/10 border border-white/5'
-              }`}
-            >
-              All Repositories ({repos.length})
-            </button>
-
-            <button
-              onClick={() => setActiveFilter('featured')}
-              type="button"
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                activeFilter === 'featured'
-                  ? 'bg-accent-lime text-ink-950 font-semibold'
-                  : 'bg-white/5 text-ink-300 hover:text-white hover:bg-white/10 border border-white/5'
-              }`}
-            >
-              Featured Highlights
-            </button>
-
-            <button
-              onClick={() => setActiveFilter('python')}
-              type="button"
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                activeFilter === 'python'
-                  ? 'bg-accent-lime text-ink-950 font-semibold'
-                  : 'bg-white/5 text-ink-300 hover:text-white hover:bg-white/10 border border-white/5'
-              }`}
-            >
-              Python &amp; ML
-            </button>
-
-            <button
-              onClick={() => setActiveFilter('web')}
-              type="button"
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                activeFilter === 'web'
-                  ? 'bg-accent-lime text-ink-950 font-semibold'
-                  : 'bg-white/5 text-ink-300 hover:text-white hover:bg-white/10 border border-white/5'
-              }`}
-            >
-              Web &amp; Tools
-            </button>
+          <div className="flex items-center gap-2 overflow-x-auto">
+            <Filter className="w-3.5 h-3.5 text-ink-400 mr-1 shrink-0" />
+            {([
+              ['featured', `Featured (${featuredRepos.length})`],
+              ['all', `All Repositories (${repos.length})`],
+              ['python', 'Python & ML'],
+              ['web', 'Web & Tools'],
+            ] as const).map(([filter, label]) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                type="button"
+                aria-pressed={activeFilter === filter}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                  activeFilter === filter
+                    ? 'bg-accent-lime text-ink-950 font-semibold'
+                    : 'bg-white/5 text-ink-300 hover:text-white hover:bg-white/10 border border-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-
-          <span className="text-xs text-ink-400 font-mono hidden sm:inline">
-            Showing {filteredRepos.length} public {filteredRepos.length === 1 ? 'project' : 'projects'}
+          <span className="text-xs text-ink-400 font-mono">
+            Showing {visibleRepos.length} {activeFilter === 'featured' ? 'featured ' : ''}{visibleRepos.length === 1 ? 'project' : 'projects'}
           </span>
         </div>
 
@@ -174,61 +152,41 @@ export const ProjectsSection: React.FC = () => {
                 </div>
               ))}
             </div>
-          ) : filteredRepos.length === 0 ? (
+          ) : visibleRepos.length === 0 ? (
             // Empty State
             <div className="text-center py-16 p-8 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
               <FolderGit2 className="w-10 h-10 text-ink-400 mx-auto" />
-              <h3 className="text-base font-bold text-white">No projects match this filter</h3>
+              <h3 className="text-base font-bold text-white">No projects found</h3>
               <p className="text-xs text-ink-400 max-w-sm mx-auto">
-                Try selecting "All Repositories" to see the full list of repositories fetched from GitHub.
+                Try another repository category or sync GitHub again.
               </p>
-              <button
-                onClick={() => setActiveFilter('all')}
-                type="button"
-                className="btn-ghost-island text-xs"
-              >
-                Reset Filter
-              </button>
             </div>
           ) : (
             // Project Cards
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRepos.map((repo) => (
+              <AnimatePresence mode="popLayout" initial={false}>
+                {visibleRepos.map((repo, index) => (
+                  <motion.div
+                    key={repo.id}
+                    layout="position"
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+                    transition={{
+                      duration: shouldReduceMotion ? 0 : 0.28,
+                      delay: shouldReduceMotion ? 0 : Math.min(index * 0.035, 0.2),
+                      layout: { duration: shouldReduceMotion ? 0 : 0.25 },
+                    }}
+                  >
                 <ProjectCard
-                  key={repo.id}
                   repo={repo}
                   onOpenModal={(r) => setSelectedRepo(r)}
                 />
-              ))}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           )}
-        </div>
-
-        {/* Bottom CTA: Explore all repositories on GitHub */}
-        <div className="mt-12 p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-left">
-            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-lime shrink-0">
-              <Github className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">
-                Looking for code commits and revision logs?
-              </h4>
-              <p className="text-xs text-ink-400">
-                Inspect public branches, commits, and datasets directly on GitHub.
-              </p>
-            </div>
-          </div>
-
-          <a
-            href={PERSONAL_INFO.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost-island text-xs whitespace-nowrap group shrink-0"
-          >
-            <span>Explore All GitHub Repositories</span>
-            <ArrowUpRight className="w-4 h-4 text-accent-lime transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
         </div>
 
       </div>

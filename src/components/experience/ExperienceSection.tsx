@@ -18,14 +18,14 @@ export const ExperienceSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-12 border-b border-white/10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-lime mb-2">
-              Career Timeline
+              Internship History &amp; Industry Roles
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
-              Work Experience
+              Professional Experience
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-ink-400 max-w-md">
-            Verified professional engagement. Honest representation of responsibilities and technical contributions.
+            Verified internship track record covering backend SaaS ERP architecture (DropXCorp) and enterprise data analysis workflows (Amdox Technologies).
           </p>
         </div>
 
@@ -48,10 +48,16 @@ export const ExperienceSection: React.FC = () => {
                       <span className="text-lg sm:text-xl font-bold text-ink-100">
                         {exp.organization}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        {exp.statusText}
-                      </span>
+                      {exp.isCurrent ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                          {exp.statusText}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-ink-300 border border-white/10">
+                          {exp.statusText}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4 text-xs text-ink-400">
@@ -65,14 +71,14 @@ export const ExperienceSection: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Building2 className="w-3.5 h-3.5 text-ink-400" />
-                        <span>Software Development &amp; Backend Engineering</span>
+                        <span>Software Development Internship</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="shrink-0 flex items-center gap-2">
                     <span className="text-xs font-mono text-ink-400 px-3 py-1.5 rounded-lg bg-black/40 border border-white/5">
-                      Active Engagement
+                      {exp.isCurrent ? 'Current Engagement' : 'Completed Internship'}
                     </span>
                   </div>
                 </div>
@@ -86,7 +92,7 @@ export const ExperienceSection: React.FC = () => {
                   <div className="space-y-2.5">
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-accent-lime flex items-center gap-2">
                       <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>Key Technical Responsibilities &amp; Contributions:</span>
+                      <span>Key Technical Responsibilities &amp; Deliverables:</span>
                     </h4>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
@@ -107,7 +113,7 @@ export const ExperienceSection: React.FC = () => {
                 <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-2">
                   <span className="text-xs font-medium text-ink-400 mr-2 flex items-center gap-1.5">
                     <GitBranch className="w-3.5 h-3.5 text-ink-400" />
-                    Stack:
+                    Technologies:
                   </span>
                   {exp.technologies.map((tech) => (
                     <span

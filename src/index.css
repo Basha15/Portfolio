@@ -9,6 +9,7 @@
     --text-secondary: #9aa3b2;
     --border-subtle: rgba(255, 255, 255, 0.08);
     --bezel-inner: #0f1118;
+    color-scheme: dark;
   }
 
   .light {
@@ -17,6 +18,7 @@
     --text-secondary: #57606a;
     --border-subtle: rgba(0, 0, 0, 0.09);
     --bezel-inner: #ffffff;
+    color-scheme: light;
   }
 
   html {
@@ -61,10 +63,93 @@
     caret-color: #b8f34a;
   }
 
+  select {
+    accent-color: #b8f34a;
+  }
+
+  select option:checked,
+  select option:hover {
+    background-color: #b8f34a;
+    color: #08090c;
+  }
+
+  .light select option {
+    background-color: #ffffff;
+    color: #0d1117;
+  }
+
+  .light select option:checked,
+  .light select option:hover {
+    background-color: #b8f34a;
+    color: #08090c;
+  }
+
   :focus-visible {
     outline: 2px solid #b8f34a;
     outline-offset: 3px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    html.custom-cursor-enabled,
+    html.custom-cursor-enabled * {
+      cursor: none !important;
+    }
+
+    html.custom-cursor-enabled input,
+    html.custom-cursor-enabled textarea,
+    html.custom-cursor-enabled select,
+    html.custom-cursor-enabled [contenteditable="true"] {
+      cursor: text !important;
+    }
+  }
+}
+
+.light [class*="bg-ink-950"] {
+  background-color: #f8f9fa;
+}
+
+.light [class*="bg-ink-900"] {
+  background-color: #ffffff;
+}
+
+.light [class*="bg-ink-850"],
+.light [class*="bg-ink-800"],
+.light [class*="bg-ink-700"] {
+  background-color: #f1f3f5;
+}
+
+.light [class*="bg-white/"],
+.light [class*="bg-black/"] {
+  background-color: rgba(15, 23, 42, 0.035);
+}
+
+.light [class*="text-white"],
+.light [class*="text-ink-50"],
+.light [class*="text-ink-100"],
+.light [class*="text-ink-200"] {
+  color: #0d1117;
+}
+
+.light [class*="text-ink-300"] {
+  color: #374151;
+}
+
+.light [class*="text-ink-400"] {
+  color: #57606a;
+}
+
+.light [class*="text-accent-lime"] {
+  color: #4d7c0f;
+}
+
+.light [class*="border-white/"] {
+  border-color: rgba(15, 23, 42, 0.12);
 }
 
 @layer components {

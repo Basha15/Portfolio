@@ -1,5 +1,6 @@
 import React from 'react';
-import { Github, ExternalLink, Star, GitFork, ArrowUpRight } from 'lucide-react';
+import { Github, ExternalLink, Star, GitFork, ArrowUpRight, Users } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { GitHubRepo, FeaturedProjectConfig } from '../../types/portfolio';
 import { FEATURED_PROJECTS_CONFIG } from '../../data/portfolioData';
 
@@ -9,6 +10,7 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ repo, onOpenModal }) => {
+  const shouldReduceMotion = useReducedMotion();
   const featuredConfig: FeaturedProjectConfig | undefined = FEATURED_PROJECTS_CONFIG.find(
     (c) => c.repoName.toLowerCase() === repo.name.toLowerCase()
   );
@@ -21,6 +23,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ repo, onOpenModal }) =
   const getLanguageColor = (lang: string | null) => {
     switch (lang?.toLowerCase()) {
       case 'python': return 'bg-blue-400';
+      case 'typescript': return 'bg-indigo-400';
       case 'javascript': return 'bg-yellow-400';
       case 'scss': case 'css': return 'bg-pink-400';
       case 'html': return 'bg-orange-500';
@@ -31,14 +34,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ repo, onOpenModal }) =
   };
 
   return (
-    <div className={`bezel-container flex flex-col h-full group transition-all duration-300 ${
-      isFeatured ? 'border-accent-lime/25' : ''
-    }`}>
+    <motion.div
+      whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.01 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      className={`bezel-container flex flex-col h-full group transition-all duration-300 ${
+        isFeatured ? 'border-accent-lime/25' : ''
+      }`}
+    >
       <div className="bezel-inner flex flex-col justify-between h-full space-y-4">
         
         {/* Top Badges & Header */}
         <div>
-          <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${getLanguageColor(repo.language)}`}></span>
               <span className="text-xs font-mono font-medium text-ink-300">
@@ -46,11 +54,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ repo, onOpenModal }) =
               </span>
             </div>
 
-            {isFeatured && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-accent-lime/10 text-accent-lime border border-accent-lime/20">
-                Featured Project
-              </span>
-            )}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {featuredConfig?.accuracy && (
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  {featuredConfig.accuracy}
+                </span>
+              )}
+              {featuredConfig?.teamSize && (
+                <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-white/5 text-ink-300 border border-white/10 flex items-center gap-1">
+                  <Users className="w-2.5 h-2.5 text-ink-400" />
+                  {featuredConfig.teamSize}
+                </span>
+              )}
+              {isFeatured && (
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-accent-lime/10 text-accent-lime border border-accent-lime/20">
+                  Featured
+                </span>
+              )}
+            </div>
           </div>
 
           <h3 
@@ -134,6 +155,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ repo, onOpenModal }) =
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 };

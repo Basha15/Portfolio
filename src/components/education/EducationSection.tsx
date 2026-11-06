@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, Calendar, MapPin, BookOpen, CheckCircle2 } from 'lucide-react';
+import { GraduationCap, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 import { EDUCATION_DATA } from '../../data/portfolioData';
 
 export const EducationSection: React.FC = () => {
@@ -14,7 +14,7 @@ export const EducationSection: React.FC = () => {
               Academic Background
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
-              Education &amp; Credentials
+              Education &amp; Qualifications
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-ink-400 max-w-md">
@@ -22,26 +22,26 @@ export const EducationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Education Card Grid */}
-        <div className="mt-10">
+        {/* Education Timeline Cards Grid */}
+        <div className="mt-10 space-y-6 max-w-4xl">
           {EDUCATION_DATA.map((edu, idx) => (
-            <div key={idx} className="bezel-container max-w-3xl">
-              <div className="bezel-inner space-y-6">
+            <div key={idx} className="bezel-container">
+              <div className="bezel-inner space-y-4">
                 
                 {/* Degree & Institution Header */}
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-white/10">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-3 border-b border-white/10">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center">
                         <GraduationCap className="w-4 h-4" />
                       </div>
                       <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-                        Undergraduate Degree
+                        {idx === 0 ? 'Undergraduate Degree (Fresher 2026)' : idx === 1 ? 'Intermediate (10+2)' : 'Secondary School Certificate (Class 10)'}
                       </span>
                     </div>
 
-                    <h3 className="font-display text-2xl font-bold text-white pt-1">
-                      {edu.degree} in {edu.field}
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-white pt-1">
+                      {edu.degree} {edu.field && <span className="text-ink-300 font-normal">in {edu.field}</span>}
                     </h3>
 
                     <p className="text-sm font-medium text-ink-200">
@@ -62,58 +62,27 @@ export const EducationSection: React.FC = () => {
                   </div>
 
                   {/* Academic Score Pill */}
-                  <div className="shrink-0 p-3 rounded-xl bg-white/[0.03] border border-white/10 text-right">
+                  <div className="shrink-0 p-3 rounded-xl bg-white/[0.03] border border-white/10 text-left sm:text-right">
                     <span className="text-[10px] uppercase font-semibold text-ink-400 block">
-                      Cumulative Score
+                      Score / Grade
                     </span>
-                    <span className="text-lg font-bold text-accent-lime font-mono">
+                    <span className="text-base sm:text-lg font-bold text-accent-lime font-mono">
                       {edu.score}
                     </span>
                   </div>
                 </div>
 
-                {/* Coursework & Focus Highlights */}
+                {/* Highlights */}
                 {edu.highlights && (
-                  <div className="space-y-3">
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-400 flex items-center gap-2">
-                      <BookOpen className="w-3.5 h-3.5 text-accent-lime" />
-                      <span>Academic Curriculum &amp; Specialization Areas</span>
-                    </h4>
-
-                    <div className="space-y-2">
-                      {edu.highlights.map((highlight, hIdx) => (
-                        <div key={hIdx} className="flex items-start gap-2.5 text-xs text-ink-300">
-                          <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
-                          <span className="leading-relaxed">{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Core Academic Disciplines */}
-                <div className="pt-3 border-t border-white/10">
-                  <span className="text-[11px] font-semibold text-ink-400 uppercase tracking-wider block mb-2">
-                    Key Coursework
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      'Data Structures & Algorithms',
-                      'Database Management Systems (DBMS)',
-                      'Object-Oriented Programming',
-                      'Operating Systems',
-                      'Computer Networks',
-                      'Software Engineering'
-                    ].map((course) => (
-                      <span
-                        key={course}
-                        className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white/5 text-ink-300 border border-white/5"
-                      >
-                        {course}
-                      </span>
+                  <div className="space-y-2 pt-1">
+                    {edu.highlights.map((highlight, hIdx) => (
+                      <div key={hIdx} className="flex items-start gap-2.5 text-xs text-ink-300">
+                        <CheckCircle2 className="w-4 h-4 text-accent-lime shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{highlight}</span>
+                      </div>
                     ))}
                   </div>
-                </div>
+                )}
 
               </div>
             </div>

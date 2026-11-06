@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { 
   Code2, 
   Terminal, 
@@ -8,7 +9,6 @@ import {
   Network, 
   Database, 
   HardDrive, 
-  Palette, 
   FileCode, 
   Table, 
   Binary, 
@@ -17,21 +17,25 @@ import {
   Component, 
   Waypoints, 
   GitMerge,
-  Filter
+  Filter,
+  Layers,
+  BrainCircuit,
+  Layout
 } from 'lucide-react';
 import { SKILLS_DATA } from '../../data/portfolioData';
 import { SkillItem, ProficiencyLevel } from '../../types/portfolio';
 
 export const SkillsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const shouldReduceMotion = useReducedMotion();
 
   const categories = [
     'All',
     'Programming',
-    'Backend & Databases',
-    'Frontend',
-    'Data & Libraries',
-    'Core Concepts',
+    'Backend & Web',
+    'Databases & ORM',
+    'Data & ML',
+    'Tools & Practices',
   ];
 
   const filteredSkills = selectedCategory === 'All'
@@ -48,7 +52,6 @@ export const SkillsSection: React.FC = () => {
       case 'Database': return <Database className="w-4 h-4" />;
       case 'HardDrive': return <HardDrive className="w-4 h-4" />;
       case 'Code2': return <Code2 className="w-4 h-4" />;
-      case 'Palette': return <Palette className="w-4 h-4" />;
       case 'FileCode': return <FileCode className="w-4 h-4" />;
       case 'Table': return <Table className="w-4 h-4" />;
       case 'Binary': return <Binary className="w-4 h-4" />;
@@ -57,6 +60,9 @@ export const SkillsSection: React.FC = () => {
       case 'Component': return <Component className="w-4 h-4" />;
       case 'Waypoints': return <Waypoints className="w-4 h-4" />;
       case 'GitMerge': return <GitMerge className="w-4 h-4" />;
+      case 'Layers': return <Layers className="w-4 h-4" />;
+      case 'BrainCircuit': return <BrainCircuit className="w-4 h-4" />;
+      case 'Layout': return <Layout className="w-4 h-4" />;
       default: return <Code2 className="w-4 h-4" />;
     }
   };
@@ -92,14 +98,14 @@ export const SkillsSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-10 border-b border-white/10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-lime mb-2">
-              Capabilities &amp; Stack
+              Technical Stack &amp; Core Competencies
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
-              Technical Skills
+              Skills &amp; Technologies
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-ink-400 max-w-md">
-            Organized with honest proficiency tiers. No arbitrary percentages—only practical engineering depth and application experience.
+            Verified directly from resume credentials. Clear, honest proficiency indications demonstrating practical experience across backends, databases, and data workflows.
           </p>
         </div>
 
@@ -124,43 +130,55 @@ export const SkillsSection: React.FC = () => {
 
         {/* Skills Grid */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSkills.map((skill: SkillItem) => (
-            <div
-              key={skill.name}
-              className="p-5 rounded-2xl bg-ink-900/70 border border-white/10 hover:border-white/25 transition-all duration-300 group hover:-translate-y-0.5"
-            >
-              <div className="flex items-start justify-between gap-3 mb-2.5">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent-lime group-hover:scale-105 transition-transform">
-                    {getIcon(skill.iconName)}
+          <AnimatePresence mode="popLayout" initial={false}>
+            {filteredSkills.map((skill: SkillItem, index) => (
+              <motion.div
+                key={skill.name}
+                layout="position"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.22,
+                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.025, 0.16),
+                  layout: { duration: shouldReduceMotion ? 0 : 0.2 },
+                }}
+                whileHover={shouldReduceMotion ? undefined : { y: -4 }}
+                className="p-5 rounded-2xl bg-ink-900/70 border border-white/10 hover:border-white/25 transition-all duration-300 group"
+              >
+                <div className="flex items-start justify-between gap-3 mb-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent-lime group-hover:scale-105 transition-transform">
+                      {getIcon(skill.iconName)}
+                    </div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-accent-lime transition-colors">
+                      {skill.name}
+                    </h3>
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-accent-lime transition-colors">
-                    {skill.name}
-                  </h3>
+                  {getProficiencyBadge(skill.level)}
                 </div>
-                {getProficiencyBadge(skill.level)}
-              </div>
 
-              <p className="text-xs text-ink-400 leading-relaxed pl-10">
-                {skill.description}
-              </p>
-            </div>
-          ))}
+                <p className="text-xs text-ink-400 leading-relaxed pl-10">
+                  {skill.description}
+                </p>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        {/* Recruiter Evaluation Transparency Note */}
+        {/* Evaluation Transparency Note */}
         <div className="mt-8 p-4 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-ink-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-accent-lime"></span>
-            <span><strong>Proficient:</strong> Day-to-day production usage at DropXcorp &amp; standalone projects.</span>
+            <span><strong>Proficient:</strong> Hands-on daily usage in internships (DropXCorp/Amdox) and team projects.</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
-            <span><strong>Working Knowledge:</strong> Academic project implementations &amp; practical usage.</span>
+            <span><strong>Working Knowledge:</strong> Production feature contributions &amp; university coursework.</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-zinc-400"></span>
-            <span><strong>Foundational:</strong> Theoretical understanding &amp; low-level concepts.</span>
+            <span><strong>Foundational:</strong> Algorithmic understanding &amp; low-level concepts.</span>
           </div>
         </div>
 
